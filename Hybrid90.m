@@ -1,4 +1,4 @@
-function [E1, E2, E3, E4] = Hybrid(Er, ELo)
+function [E1, E2, E3, E4] = Hybrid90(Er, ELo)
     
     % 3-dB coupler transfer function:
     Hc = (1/sqrt(2))*[1 1; 1 -1];

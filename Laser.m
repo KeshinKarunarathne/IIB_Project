@@ -12,7 +12,7 @@ function [E] = Laser(Pcw, laserLinewidth, SpS, Rs, NSymb, NPol)
         error('The possible number of polarizations used must be 1 or 2');
     end
 
-    % If the laser linewidth is not 0 Hz, phase, noise is inserted 
+    % If the laser linewidth is not 0 Hz, phase noise is inserted 
     if laserLinewidth ~= 0
         % Period between samples at the (oversampled) transmit. signal:
         T = 1/(SpS*Rs);
