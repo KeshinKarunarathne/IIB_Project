@@ -2,16 +2,16 @@ function [E] = LaserModified(Pcw_dBm, centreLambda, lineWidth, SpS, Rs, NSymb, N
 
     c = 299792458; % Speed of light in m/s
 
-    PcwLinear = 10^(Pcw_dBm/10); % Linear power of laser output in mW
+    PcwLinear = 10^(Pcw_dBm/10 - 3); % Linear power of laser output in W
 
     T = 1/(SpS*Rs); % Period between samples
     t= [0:1:NSymb*SpS - 1]*T; t=t'; % Salient time indices to sample E field
     
     % Generating electric field of chosen wavelength
     if NPol == 1
-        E = sqrt(PcwLinear/1000)*exp(1i*(2*pi*c/centreLambda)*t);
+        E = sqrt(PcwLinear)*exp(1i*(2*pi*c/centreLambda)*t);
     elseif NPol == 2
-        E(:,1) = sqrt(PcwLinear/1000)*exp(1i*(2*pi*c/centreLambda)*t);
+        E(:,1) = sqrt(PcwLinear)*exp(1i*(2*pi*c/centreLambda)*t);
         E(:,2) = E(:,1);
     else
         error('The possible number of polarizations used must be 1 or 2');
