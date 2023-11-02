@@ -1,13 +1,13 @@
-function [out] = CDInsertion(in, SpS, Rs, D,CLambda, L, NPol)
+function [out] = CDInsertion(in, SpS, Rs, D, CLambda, L, NPol)
 
     % Constants:
     c = 299792458; % Speed of light
 
     % Dispersion:
-    D=D*1e-12/(1e-9*1e3); % In S.I. untits
+    D = D*1e-12/(1e-9*1e3); % In S.I. units
 
     % Frequency vector:
-    w=2*pi*(-1/2:1/size(in,1):1/2-1/size(in,1)).'*SpS*Rs;
+    w = 2*pi*(-1/2 :1/size(in,1) :1/2 - 1/size(in,1)).'*SpS*Rs;
 
     % Calculating the CD frequency response:
     G = exp(1i*((D*CLambda^2)/(4*pi*c))*L*w.^2);

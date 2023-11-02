@@ -1,10 +1,11 @@
 function [Out] = OverlapSaveCDC(In,D,L,CLambda,Rs,NPol,SpSIn,NFFT,NOverlap)
     
     % Parameters:
-    c = 299792458 ;D=D*1e-6;
+    c = 299792458; 
+    D=D*1e-6;
 
     % Index for coefficient calculation and Nyquist frequency:
-    n = (-NFFT/2:NFFT/2-1)' ; fN = SpSIn*Rs/2;
+    n = (-NFFT/2:NFFT/2 -1)'; fN = SpSIn*Rs/2;
 
     % Calculating the CD frequency response:
     HCD = exp(-1i*pi*CLambda^2*D*L/c*(n*2*fN/NFFT).^2);
@@ -21,7 +22,11 @@ function [Out] = OverlapSaveCDC(In,D,L,CLambda,Rs,NPol,SpSIn,NFFT,NOverlap)
     
     if AuxLen ~= ceil(AuxLen)
         NExtra = ceil(AuxLen)*(NFFT-NOverlap)-size(In,1);
-        In = [In(end-NExtra/2+1:end,:); In ; In(1:NExtra/2,:)];
+        if mod(NExtra, 2) == 0
+            In = [In(end-NExtra/2+1:end,:); In ; In(1:NExtra/2,:)];
+        else
+            In = [In(end-(NExtra+1)/2+1:end,:); In ; In(1:(NExtra+1)/2-1,:)];
+        end
     else
         NExtra = NOverlap;
         In = [In(end-NExtra/2+1:end,:); In ; In(1:NExtra/2,:)];
