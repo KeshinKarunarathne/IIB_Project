@@ -1,14 +1,13 @@
 function [v, varargout] = BPS(z, modOrder, NPol, ParamBPS)
 
     % Number of test rotations and ambiguity angle; Total BPS block length:
-    B = ParamBPS.B;p= pi/2 ; N = ParamBPS.N;L=2*N+1;
+    B = ParamBPS.B; p = pi/2 ; N = ParamBPS.N; L=2*N+1;
 
     % Creating a vector of test carrier phase angles:
     b = -B/2:1:B/2-1 ; ThetaTest = p*b/B;
 
     % Creating a matrix of test carrier phase angles:
     ThetaTestMatrix = repmat(exp(-1j*ThetaTest),L,1);
-
     if NPol == 2
         ThetaTestMatrix = cat(3,ThetaTestMatrix,ThetaTestMatrix);
     end
