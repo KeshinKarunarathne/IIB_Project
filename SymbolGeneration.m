@@ -1,5 +1,6 @@
 function [bits, modBits] = SymbolGeneration(modFormat, NSymb)
-    
+    % This function maps a set of input bits to the chosen modulation
+    % format - QPSK or 16-QAM
     switch modFormat
         case {'QPSK'}
             bitsPerSymbol = 2;
