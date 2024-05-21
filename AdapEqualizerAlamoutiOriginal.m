@@ -1,4 +1,4 @@
-function [y,pArr,w11_Arr,w12_Arr,w21_Arr,w22_Arr,errorArr] = AdapEqualizerAlamouti(x, trainSymbs, SpS, NTaps, Mu_T, Mu_DD, Mu_p, N1, modFormat, runs)
+function [y,pArr,w11_Arr,w12_Arr,w21_Arr,w22_Arr,errorArr] = AdapEqualizerAlamoutiOriginal(x, trainSymbs, SpS, NTaps, Mu_T, Mu_DD, Mu_p, N1, modFormat)
 
     % This function implements the 2x2 butterly MIMO for adaptive equalization
 
@@ -12,6 +12,7 @@ function [y,pArr,w11_Arr,w12_Arr,w21_Arr,w22_Arr,errorArr] = AdapEqualizerAlamou
     % Mu_p - step-size for phase correction
     % N1 - Number of iterations of the training stage before switching to decision-directed mode
     % modFormat - Modulation format -> 'QPSK' for now
+    % runs - No. of runs of the equalizer
 
     % Outputs
     % y - Equalized symbols as a single-column vector
@@ -22,9 +23,6 @@ function [y,pArr,w11_Arr,w12_Arr,w21_Arr,w22_Arr,errorArr] = AdapEqualizerAlamou
     % w22_Arr - variation of coefficient of w22 
     % errorArr - variation of error as a two-column matrix
 
-    x = repmat(x, runs, 1);
-    trainSymbs = repmat(trainSymbs, runs, 1);
-    
     u_o = zeros(length(x)/2,1); u_e = zeros(length(x)/2,1);
 
     % Separation of odd and even symbols
@@ -57,7 +55,7 @@ function [y,pArr,w11_Arr,w12_Arr,w21_Arr,w22_Arr,errorArr] = AdapEqualizerAlamou
     y = zeros(OutLength*2,1);
     
     % Intialising vectors to store data
-    pArr = zeros(OutLength,4); vArr = zeros(OutLength,2); errorArr = zeros(OutLength,2);
+    pArr = zeros(OutLength,1); vArr = zeros(OutLength,2); errorArr = zeros(OutLength,2);
     w11_Arr = zeros(NTaps, OutLength); w12_Arr = zeros(NTaps, OutLength);
     w21_Arr = zeros(NTaps, OutLength); w22_Arr = zeros(NTaps, OutLength);
 
@@ -67,19 +65,17 @@ function [y,pArr,w11_Arr,w12_Arr,w21_Arr,w22_Arr,errorArr] = AdapEqualizerAlamou
 
     % Initialising filter coefficients
     w11(floor(NTaps/2)+1) = 0.5; w11(floor(NTaps/2)) = 0.5;
-    w22(floor(NTaps/2)+1) = -0.5; w22(floor(NTaps/2)) = -0.5; 
+    w22(floor(NTaps/2)+1) = 0.5; w22(floor(NTaps/2)) = -0.5; 
 
     % Initialising phase corrections
-%     p1a = 1; p1b = 1; p1 = 1; 
-%     p2a = 1; p2b = 1; p2 = 1;
-    p1=1; p2=1; p3=1; p4=1;
+    p1a = 1; p1b = 1; p1 = 1; 
 
     trainSymbIndex = 1;
     for i = 1:OutLength
 
         % Calculating the outputs:
-        v_o = p1*w11.'*u_o(:,i) + p2*w12.'*conj(u_e(:,i));
-        v_e = p3*w21.'*u_o(:,i) + p4*w22.'*conj(u_e(:,i));
+        v_o = p1*w11.'*u_o(:,i) + conj(p1)*w12.'*conj(u_e(:,i));
+        v_e = p1*w21.'*u_o(:,i) + conj(p1)*w22.'*conj(u_e(:,i));
 
         % Storing equalised symbols for plotting
         vArr(i,1) = v_o; vArr(i,2) = v_e;
@@ -99,34 +95,16 @@ function [y,pArr,w11_Arr,w12_Arr,w21_Arr,w22_Arr,errorArr] = AdapEqualizerAlamou
         % Storing errors for plotting
         errorArr(i,1) = e_o; errorArr(i,2) = e_e;
 
-        % Updating phase correction
-        p1 = p1 + Mu_p*e_o*conj(w11.'*u_o(:,i));
-        p2 = p2 + Mu_p*e_o*conj(w12.'*conj(u_e(:,i)));
-        p3 = p3 + Mu_p*e_e*conj(w21.'*u_o(:,i));
-        p4 = p4 + Mu_p*e_e*conj(w22.'*conj(u_e(:,i)));
-        pArr(i,1) = p1; pArr(i,2) = p2; pArr(i,3) = p3; pArr(i,4) = p4;
-
-        % First phase correction term
-%         p1a = p1a + Mu_p*e_o*conj(w11.'*u_o(:,i));
-%         p1b = p1b + Mu_p*e_o*conj(w12.'*conj(u_e(:,i)));
-%         p1 = (p1a + conj(p1b))/2; % Phase correction
-%         pArr(i,1) = p1; % Storing phase correction for plotting
-% 
-%         % Second phase correction term 
-%         p2a = p2a + Mu_p*e_e*conj(w21.'*u_o(:,i));
-%         p2b = p2b + Mu_p*e_e*conj(w22.'*conj(u_e(:,i)));
-%         p2 = (p2a + conj(p2b))/2; % Phase correction
-%         pArr(i,2) = p2; % Storing phase correction for plotting
+        p1a = p1a + Mu_p*e_o*conj(w11.'*u_o(:,i));
+        p1b = p1b + Mu_p*e_o*conj(w12.'*conj(u_e(:,i)));
+        p1 = (p1a + conj(p1b))/2; % Phase correction
+        pArr(i,1) = p1; % Storing phase correction for plotting
 
         % Updating the filter coefficients:
         w11 = w11 + Mu*abs(p1)*e_o*conj(u_o(:,i))/p1;
-        w12 = w12 + Mu*abs(p2)*e_o*u_e(:,i)/p2;
-        w21 = w21 + Mu*abs(p3)*e_e*conj(u_o(:,i))/p3;
-        w22 = w22 + Mu*abs(p4)*e_e*u_e(:,i)/p4;
-%         w11 = w11 + Mu*abs(p1)*e_o*conj(u_o(:,i))/p1;
-%         w12 = w12 + Mu*abs(p1)*e_o*u_e(:,i)/conj(p1);
-%         w21 = w21 + Mu*abs(p2)*e_e*conj(u_o(:,i))/p2;
-%         w22 = w22 + Mu*abs(p2)*e_e*u_e(:,i)/conj(p2);
+        w12 = w12 + Mu*abs(p1)*e_o*u_e(:,i)/conj(p1);
+        w21 = w21 + Mu*abs(p1)*e_e*conj(u_o(:,i))/p1;
+        w22 = w22 + Mu*abs(p1)*e_e*u_e(:,i)/conj(p1);
         
         % Storing updated filter coefficients for plotting
         w11_Arr(:,i)=w11; w12_Arr(:,i)=w12; w21_Arr(:,i)=w21; w22_Arr(:,i)=w22;
