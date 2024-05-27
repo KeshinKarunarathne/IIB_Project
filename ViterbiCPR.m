@@ -1,5 +1,8 @@
 function [v,varargout] = ViterbiCPR(z, Delta_nu, Rs, OSNRdB, Es, NPol, M, ParamViterbi)
 
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
+
     % Block length for the phase estimation:
     N = ParamViterbi.N ; L = 2*N+1;
 
