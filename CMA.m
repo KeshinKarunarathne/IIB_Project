@@ -1,4 +1,7 @@
 function [w1V,w1H,w2V,w2H] = CMA(xV, xH, y1, y2, w1V, w1H, w2V, w2H, R, Mu)
+
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
     
     % Updating the filters:
     w1V = w1V + Mu*xV*(R-abs(y1).^2)*conj(y1);

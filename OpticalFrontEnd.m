@@ -1,4 +1,7 @@
 function [Out] = OpticalFrontEnd(Er, ELo, R, NPol)
+
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
     
     % 90 degree Hybrid:
     [E1,E2,E3,E4] = Hybrid90(Er(:,1),ELo(:,1));

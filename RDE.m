@@ -1,5 +1,8 @@
 function [w1V,w1H,w2V,w2H] = RDE(xV,xH,y1,y2,w1V,w1H,w2V,w2H,R,Mu)
 
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
+
     % Radius for output y1 and output y2
     [~,r1] = min(abs(R-abs(y1))) ; [~,r2] = min(abs(R-abs(y2)));
 
