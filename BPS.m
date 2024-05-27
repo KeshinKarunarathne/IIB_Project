@@ -1,5 +1,8 @@
 function [v, varargout] = BPS(z, modOrder, NPol, ParamBPS)
 
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
+
     % Number of test rotations and ambiguity angle; Total BPS block length:
     B = ParamBPS.B; p = pi/2 ; N = ParamBPS.N; L=2*N+1;
 
@@ -35,7 +38,7 @@ function [v, varargout] = BPS(z, modOrder, NPol, ParamBPS)
         zRot = repmat(zBlocks(:,i,:),1,B,1).*ThetaTestMatrix;
 
         % Decision of the rotated symbols:
-        zRot_Decided = qammod(qamdemod(zRot, modOrder, UnitAveragePower=true), modOrder, UnitAveragePower=true);
+        zRot_Decided = qammod(qamdemod(zRot, modOrder, UnitAveragePower=true), modOrder, UnitAveragePower=true); % 16-QAM
         % zRot_Decided = Decision(zRot,ModFormat,false);
 
         % Intermidiate signal to be minimized:

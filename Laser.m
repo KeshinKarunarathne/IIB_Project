@@ -1,5 +1,8 @@
 function [E] = Laser(Pcw, laserLinewidth, SpS, Rs, NSymb, NPol)
 
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
+
     % Calculating the linear power of the continuous wave:
     PcwLinear = 1e-3*10^(Pcw/10);
 
@@ -16,6 +19,7 @@ function [E] = Laser(Pcw, laserLinewidth, SpS, Rs, NSymb, NPol)
     if laserLinewidth ~= 0
         % Period between samples at the (oversampled) transmit. signal:
         T = 1/(SpS*Rs);
+        
         % Calculating the phase noise:
         Var = 2*pi*laserLinewidth*T ;
         Delta_theta = sqrt(Var)*randn(size(E,1),1);

@@ -1,5 +1,8 @@
 function [EOutput, varargout] = PMDInsertion(EInput, DGDSpec, L, N, Rs, SpS, EvalGroupDelay)
 
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
+
     % Standard deviation of the Maxwellian distribution:
     SDTau = sqrt(3*pi/8)*DGDSpec;
 

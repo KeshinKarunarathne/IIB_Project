@@ -1,4 +1,7 @@
 function [E1, E2, E3, E4] = Hybrid90(Er, ELo)
+
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
     
     % 3-dB coupler transfer function:
     Hc = (1/sqrt(2))*[1 1; 1 -1];

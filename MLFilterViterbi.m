@@ -1,5 +1,8 @@
 function [wML] = MLFilterViterbi(M, Delta_nu, Rs, OSNRdB, Es, NPol, N)
 
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
+
     % Block length for the Viterbi & Viterbi algorithm, symbol period, and phase noise variance:
     L=2*N+1 ; Ts = 1/Rs ; Sigma_DeltaTheta2 = 2*pi*Delta_nu*Ts;
     

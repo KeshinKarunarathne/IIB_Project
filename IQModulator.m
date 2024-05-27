@@ -1,5 +1,8 @@
 function [Eout] = IQModulator(xb, Ein, ParamMZM)
 
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
+
     % Obtaining the in-phase and quadrature components of the electrical:
     mI = real(xb); mI = mI/max(abs(mI)); % In-phase;
     mQ = imag(xb); mQ = mQ/max(abs(mQ)); % Quadrature;

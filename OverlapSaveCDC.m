@@ -1,8 +1,11 @@
 function [Out] = OverlapSaveCDC(In,D,L,CLambda,Rs,NPol,SpSIn,NFFT,NOverlap)
+
+    % This function is part of the book Digital Coherent Optical Systems;
+    % Darli A. A. Mello and Fabio A. Barbosa;
     
     % Parameters:
     c = 299792458; 
-    D=D*1e-6;
+    D = D*1e-6;
 
     % Index for coefficient calculation and Nyquist frequency:
     n = (-NFFT/2:NFFT/2 -1)'; fN = SpSIn*Rs/2;
